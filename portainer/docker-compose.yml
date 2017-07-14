@@ -10,7 +10,7 @@ services:
       - ./admin/data:/data
     labels:
       - "traefik.port=9000"
-      - "traefik.backend=admin"
+      - "traefik.frontend.rule=Host:admin.gokit.info"
     networks:
       - admin
       - gateway

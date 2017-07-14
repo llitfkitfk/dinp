@@ -20,7 +20,7 @@ services:
     networks:
       - gateway
     labels:
-      - "traefik.frontend=whoami"
+      - "traefik.frontend.rule=Host:whoami.gokit.info"
   dash:
     image: svendowideit/ambassador
     restart: always
@@ -28,7 +28,7 @@ services:
       - app
     labels:
       - "traefik.port=8080"
-      - "traefik.frontend=dash"
+      - "traefik.frontend.rule=Host:dash.gokit.info"
     environment: 
       - DASH_PORT_8080_TCP=tcp://app:8080
     networks:
