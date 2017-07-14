@@ -28,7 +28,7 @@ services:
       - app
     labels:
       - "traefik.port=8080"
-      - "traefik.backend=dash"
+      - "traefik.frontend=dash"
     environment: 
       - DASH_PORT_8080_TCP=tcp://app:8080
     networks:
