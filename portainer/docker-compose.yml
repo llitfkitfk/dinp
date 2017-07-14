@@ -11,6 +11,7 @@ services:
     labels:
       - "traefik.port=9000"
       - "traefik.frontend.rule=Host:admin.gokit.info"
+      - "traefik.docker.network=traefik_gateway"
     networks:
       - admin
       - gateway
