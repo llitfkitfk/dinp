@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+  app:
+    image: containerize/goreact
+    labels:
+      - "traefik.port=8080"
+      - "traefik.frontend.rule=Host:goreact.gokit.info"
+      - "traefik.docker.network=traefik_gateway"
+    restart: always
+    networks: 
+      - app
+      - gateway
+      
+networks:
+  app:
+  gateway:
+    external:
+      name: traefik_gateway
