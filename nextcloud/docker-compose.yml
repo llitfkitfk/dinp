@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+  cloud:
+    image: nextcloud
+    labels:
+      - "traefik.port=80"
+      - "traefik.frontend.rule=Host:cloud.gokit.info"
+      - "traefik.docker.network=traefik_gateway"
+    restart: always
+    volumes:
+      - ./data:/var/www/html
+    networks: 
+      - cloud
+      - gateway
+networks:
+  cloud:
+  gateway:
+    external:
+      name: traefik_gateway
