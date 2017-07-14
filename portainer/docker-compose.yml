@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+  admin:
+    image: portainer/portainer
+    restart: always
+    command: -H unix:///var/run/docker.sock
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./admin/data:/data
+    labels:
+      - "traefik.port=9000"
+      - "traefik.backend=admin"
+    networks:
+      - admin
+      - gateway
+networks:
+  admin:
+  gateway:
+    external:
+      name: traefik_gateway
