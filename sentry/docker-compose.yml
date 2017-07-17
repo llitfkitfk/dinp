@@ -42,9 +42,13 @@ services:
       - postgres
       - memcached
       - smtp
-    ports:
-      - '9000:9000'
-
+    labels:
+      - "traefik.port=9000"
+      - "traefik.frontend.rule=Host:sentry.gokit.info"
+      - "traefik.docker.network=traefik_gateway"
+    networks: 
+      - gateway
+      - net
   cron:
     extends: base
     command: run cron
@@ -62,3 +66,8 @@ services:
       - postgres
       - memcached
       - smtp
+networks:
+  net:
+  gateway:
+    external:
+      name: traefik_gateway
