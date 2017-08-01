@@ -5,8 +5,8 @@ services:
     image:  containerize/cms 
     restart: always
     command: run --https admin,api
-    volumes:
-      #- ./cms/data:/app/cms
+    # volumes:
+      # - ./cms/data:/app/cms
     labels:
       - "traefik.port=443"
       - "traefik.frontend.rule=Host:cms.gokit.info"
