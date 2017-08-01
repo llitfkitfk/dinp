@@ -4,14 +4,14 @@ services:
   cms:
     image:  containerize/cms 
     restart: always
-    command: run --bind 0.0.0.0 --https admin,api
+    command: run --bind 0.0.0.0 admin,api
     # volumes:
       # - ./cms/data/system.db:/app/cms/system.db
       # - ./cms/data/analytics.db:/app/cms/analytics.db
       # - ./cms/data/uploads:/app/cms/uploads
       # - ./cms/data/search:/app/cms/search
     labels:
-      - "traefik.port=443"
+      - "traefik.port=8080"
       - "traefik.frontend.rule=Host:cms.gokit.info"
       - "traefik.docker.network=traefik_gateway"
     networks:
