@@ -1,4 +1,5 @@
 *.override.yml
+*.stack.yml
 portainer/admin
 traefik/log
 nextcloud/data
