@@ -20,22 +20,22 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /dev/null:/traefik.toml
     deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+      update_config:
+        delay: 10s
       placement:
         constraints:
           - node.role == manager
           - node.hostname == node1
-        restart_policy:
-          condition: on-failure
-          delay: 5s
-        update_config:
-          delay: 10s
   visualizer:
     image: dockersamples/visualizer:stable
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
     deploy:
+      replicas: 2
       placement:
-        replicas: 2
         constraints: 
           - node.role == manager
   # whoami:
