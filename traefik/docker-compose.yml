@@ -31,6 +31,7 @@ services:
           - node.hostname == node1
   visualizer:
     image: dockersamples/visualizer:stable
+    restart: always
     labels:
       - "traefik.port=8080"
       - "traefik.frontend.rule=Host:viz.gokit.info"
@@ -41,13 +42,15 @@ services:
       placement:
         constraints: 
           - node.role == manager
-  # whoami:
-  #   image: emilevauge/whoami
-  #   restart: always
-  #   networks:
-  #     - gateway
-  #   labels:
-  #     - "traefik.frontend.rule=Host:whoami.gokit.info"
+  whoami:
+    image: emilevauge/whoami
+    restart: always
+    networks:
+      - gateway
+    labels:
+      - "traefik.frontend.rule=Host:whoami.gokit.info"
+    deploy:
+      replicas: 3
   dash:
     image: svendowideit/ambassador
     restart: always
