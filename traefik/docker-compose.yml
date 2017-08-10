@@ -22,8 +22,9 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
-        delay: 5s
+        delay: 1s
       update_config:
+        parallelism: 2
         delay: 10s
       placement:
         constraints:
@@ -32,12 +33,17 @@ services:
   visualizer:
     image: dockersamples/visualizer:stable
     restart: always
+    networks:
+      - gateway
     labels:
       - "traefik.port=8080"
       - "traefik.frontend.rule=Host:viz.gokit.info"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
     deploy:
+      labels:
+        - "traefik.port=8080"
+        - "traefik.frontend.rule=Host:viz.gokit.info"
       replicas: 2
       placement:
         constraints: 
@@ -48,9 +54,13 @@ services:
     networks:
       - gateway
     labels:
+      - "traefik.port=80"
       - "traefik.frontend.rule=Host:whoami.gokit.info"
     deploy:
       replicas: 3
+      labels:
+        - "traefik.port=80"
+        - "traefik.frontend.rule=Host:whoami.gokit.info"
   dash:
     image: svendowideit/ambassador
     restart: always
@@ -65,5 +75,8 @@ services:
       - gateway
     deploy:
       replicas: 3
+      labels:
+        - "traefik.port=8080"
+        - "traefik.frontend.rule=Host:dash.gokit.info"
 networks:
   gateway:
