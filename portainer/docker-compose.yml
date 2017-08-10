@@ -7,7 +7,7 @@ services:
     command: -H unix:///var/run/docker.sock
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./admin/data:/data
+      - data:/data
     labels:
       - "traefik.port=9000"
       - "traefik.frontend.rule=Host:admin.gokit.info"
@@ -30,6 +30,8 @@ services:
         constraints:
           - node.role == manager
           - node.hostname == node1
+volumes:
+  data:
 networks:
   admin:
   gateway:
