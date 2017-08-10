@@ -30,6 +30,17 @@ services:
         constraints:
           - node.role == manager
           - node.hostname == node1
+  nodes:
+    image: containerize/docker-proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - admin
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
+        delay: 1s                
 volumes:
   data:
 networks:
