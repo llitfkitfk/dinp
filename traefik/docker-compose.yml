@@ -31,6 +31,9 @@ services:
           - node.hostname == node1
   visualizer:
     image: dockersamples/visualizer:stable
+    labels:
+      - "traefik.port=8080"
+      - "traefik.frontend.rule=Host:viz.gokit.info"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
     deploy:
@@ -45,17 +48,19 @@ services:
   #     - gateway
   #   labels:
   #     - "traefik.frontend.rule=Host:whoami.gokit.info"
-  # dash:
-  #   image: svendowideit/ambassador
-  #   restart: always
-  #   links: 
-  #     - app
-  #   labels:
-  #     - "traefik.port=8080"
-  #     - "traefik.frontend.rule=Host:dash.gokit.info"
-  #   environment: 
-  #     - DASH_PORT_8080_TCP=tcp://app:8080
-  #   networks:
-  #     - gateway
+  dash:
+    image: svendowideit/ambassador
+    restart: always
+    links: 
+      - app
+    labels:
+      - "traefik.port=8080"
+      - "traefik.frontend.rule=Host:dash.gokit.info"
+    environment: 
+      - DASH_PORT_8080_TCP=tcp://app:8080
+    networks:
+      - gateway
+    deploy:
+      replicas: 3
 networks:
   gateway:
