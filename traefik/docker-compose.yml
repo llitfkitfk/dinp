@@ -1,10 +1,13 @@
-version: '2'
+version: '3'
 
 services:
   app:
     image: traefik
-    #  --accessLogsFile=/log/access.log --defaultEntryPoints=http,https --entryPoints='Name:http Address::80 Redirect.EntryPoint:https' --entryPoints='Name:https Address::443 TLS' --acme --acme.entrypoint=https --acme.OnHostRule --acme.domains=gokit.info --acme.storage=acme.json --acme.email=llitfkitfk@gmail.com --web --docker --docker.domain=gokit.info
-    command: --web --docker --docker.domain=gokit.info
+    command: --web --docker --docker.domain=gokit.info 
+    # --accessLogsFile=/log/access.log 
+    # --defaultEntryPoints=http,https --entryPoints='Name:http Address::80 Redirect.EntryPoint:https' --entryPoints='Name:https Address::443 TLS' 
+    # --acme --acme.entrypoint=https --acme.OnHostRule --acme.domains=gokit.info --acme.storage=acme.json --acme.email=llitfkitfk@gmail.com
+    # --web --docker --docker.swarmmode --docker.watch --docker.domain=gokit.info
     restart: always
     labels: 
       - traefik.enable=false
@@ -16,24 +19,43 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /dev/null:/traefik.toml
-  whoami:
-    image: emilevauge/whoami
-    restart: always
-    networks:
-      - gateway
-    labels:
-      - "traefik.frontend.rule=Host:whoami.gokit.info"
-  dash:
-    image: svendowideit/ambassador
-    restart: always
-    links: 
-      - app
-    labels:
-      - "traefik.port=8080"
-      - "traefik.frontend.rule=Host:dash.gokit.info"
-    environment: 
-      - DASH_PORT_8080_TCP=tcp://app:8080
-    networks:
-      - gateway
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+          - node.hostname == node1
+        restart_policy:
+          condition: on-failure
+          delay: 5s
+        update_config:
+          delay: 10s
+  visualizer:
+    image: dockersamples/visualizer:stable
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        replicas: 2
+        constraints: 
+          - node.role == manager
+  # whoami:
+  #   image: emilevauge/whoami
+  #   restart: always
+  #   networks:
+  #     - gateway
+  #   labels:
+  #     - "traefik.frontend.rule=Host:whoami.gokit.info"
+  # dash:
+  #   image: svendowideit/ambassador
+  #   restart: always
+  #   links: 
+  #     - app
+  #   labels:
+  #     - "traefik.port=8080"
+  #     - "traefik.frontend.rule=Host:dash.gokit.info"
+  #   environment: 
+  #     - DASH_PORT_8080_TCP=tcp://app:8080
+  #   networks:
+  #     - gateway
 networks:
   gateway:
