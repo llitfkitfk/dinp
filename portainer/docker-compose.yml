@@ -15,6 +15,21 @@ services:
     networks:
       - admin
       - gateway
+    deploy:
+      labels:
+        - "traefik.port=9000"
+        - "traefik.frontend.rule=Host:admin.gokit.info"
+        - "traefik.docker.network=traefik_gateway"
+      restart_policy:
+        condition: on-failure
+        delay: 1s
+      update_config:
+        parallelism: 2
+        delay: 10s
+      placement:
+        constraints:
+          - node.role == manager
+          - node.hostname == node1
 networks:
   admin:
   gateway:
