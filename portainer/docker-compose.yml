@@ -1,15 +1,6 @@
 version: '3'
 
 services:
-  nginx:
-    image: nginx
-    networks:
-      - admin
-    deploy:
-      placement:
-        constraints:
-          - node.role == manager
-          - node.hostname == node1
   admin:
     image: portainer/portainer
     restart: always
@@ -43,7 +34,6 @@ services:
     image: containerize/docker-proxy
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    hostname: $HOSTNAME
     networks:
       - admin
     command: -i
