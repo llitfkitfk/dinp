@@ -19,6 +19,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /dev/null:/traefik.toml
+      - data-log:/log
     deploy:
       restart_policy:
         condition: on-failure
@@ -94,5 +95,7 @@ services:
       labels:
         - "traefik.port=8080"
         - "traefik.frontend.rule=Host:dash.gokit.info"
+volumes:
+  data-log:
 networks:
   gateway:
