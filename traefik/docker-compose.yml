@@ -8,6 +8,7 @@ services:
       --defaultEntryPoints=http,https --entryPoints='Name:http Address::80 Redirect.EntryPoint:https' --entryPoints='Name:https Address::443 TLS' 
       --acme --acme.entrypoint=https --acme.OnHostRule --acme.domains=gokit.info --acme.storage=acme.json --acme.email=llitfkitfk@gmail.com
       --web --docker --docker.swarmmode --docker.watch --docker.domain=gokit.info
+      --web.metrics.prometheus --web.metrics.prometheus.buckets="0.1,0.3,1.2,5.0"
     restart: always
     labels: 
       - traefik.enable=false
@@ -70,30 +71,23 @@ services:
     restart: always
     networks:
       - gateway
-    labels:
-      - "traefik.port=80"
-      - "traefik.frontend.rule=Host:whoami.gokit.info"
     deploy:
       replicas: 3
       labels:
         - "traefik.port=80"
         - "traefik.frontend.rule=Host:whoami.gokit.info"
   dash:
-    image: svendowideit/ambassador
+    image: containerize/nginx-proxy
     restart: always
-    links: 
-      - app
-    labels:
-      - "traefik.port=8080"
-      - "traefik.frontend.rule=Host:dash.gokit.info"
     environment: 
-      - DASH_PORT_8080_TCP=tcp://app:8080
+      - SERVER_PROXY_HOST=app
+      - SERVER_PROXY_PORT=8080
     networks:
       - gateway
     deploy:
       replicas: 3
       labels:
-        - "traefik.port=8080"
+        - "traefik.port=80"
         - "traefik.frontend.rule=Host:dash.gokit.info"
 volumes:
   data-log:
