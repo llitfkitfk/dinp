@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  miner:
+    image:  containerize/miner
+    restart: always
+    command: server -T <telegram_bot_token>
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - "traefik.enable=false"
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 1s
+      update_config:
+        parallelism: 2
+        delay: 10s
+      placement:
+        constraints:
+          - node.role == manager
+          - node.hostname == node1
