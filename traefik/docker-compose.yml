@@ -80,20 +80,15 @@ services:
         - "traefik.port=80"
         - "traefik.frontend.rule=Host:whoami.gokit.info"
   dash:
-    image: svendowideit/ambassador
-    restart: always
-    links: 
-      - app
-    labels:
-      - "traefik.port=8080"
-      - "traefik.frontend.rule=Host:dash.gokit.info"
+    image: containerize/nginx-proxy
     environment: 
-      - DASH_PORT_8080_TCP=tcp://app:8080
+      - SERVER_PROXY_HOST=app
+      - SERVER_PROXY_PORT=8080
     networks:
       - gateway
     deploy:
       labels:
-        - "traefik.port=8080"
+        - "traefik.port=80"
         - "traefik.frontend.rule=Host:dash.gokit.info"
 volumes:
   data-log:
