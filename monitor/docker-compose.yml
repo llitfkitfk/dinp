@@ -3,7 +3,6 @@ version: '3'
 services:
   prometheus:
     image: prom/prometheus
-    container_name: prometheus
     volumes:
       - prometheus-config:/etc/prometheus/
       - prometheus-data:/prometheus
@@ -13,15 +12,10 @@ services:
       # - '-alertmanager.url=http://alertmanager:9093'
     networks:
       - back-tier
-      - gateway
     deploy:
       placement:
         constraints:
           - node.hostname == node2
-      labels:
-        - "traefik.port=9090"
-        - "traefik.frontend.rule=Host:prometheus.gokit.info"
-        - "traefik.docker.network=traefik_gateway"
       restart_policy:
         condition: on-failure
         delay: 1s
@@ -75,7 +69,7 @@ services:
           - node.hostname == node2
       labels:
         - "traefik.port=3000"
-        - "traefik.frontend.rule=Host:grafana.gokit.info"
+        - "traefik.frontend.rule=Host:monitor.gokit.info"
         - "traefik.docker.network=traefik_gateway"
       restart_policy:
         condition: on-failure
@@ -87,7 +81,6 @@ volumes:
   prometheus-config:
   prometheus-data:
   grafana-data:
-  # alertmanager-config:
 
 networks:
   front-tier:
