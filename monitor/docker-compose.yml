@@ -4,8 +4,8 @@ services:
   prometheus:
     image: prom/prometheus
     volumes:
-      - prometheus-config:/etc/prometheus/
-      - prometheus-data:/prometheus
+      - prometheus_config:/etc/prometheus/
+      - prometheus_data:/prometheus
     command:
       - '-config.file=/etc/prometheus/prometheus.yml'
       - '-storage.local.path=/prometheus'
@@ -31,7 +31,6 @@ services:
     command: '-collector.procfs=/host/proc -collector.sysfs=/host/sys -collector.filesystem.ignored-mount-points="^(/rootfs|/host|)/(sys|proc|dev|host|etc)($$|/)" collector.filesystem.ignored-fs-types="^(sys|proc|auto|cgroup|devpts|ns|au|fuse\.lxc|mqueue)(fs|)$$"'
     networks:
       - back-tier
-    deploy:
   # alertmanager:
   #   image: prom/alertmanager
   #   ports:
@@ -58,10 +57,12 @@ services:
   grafana:
     image: grafana/grafana
     volumes:
-      - grafana-data:/var/lib/grafana
+      - grafana_data:/var/lib/grafana
+    environment: 
+      - GF_SECURITY_ADMIN_PASSWORD=foobar
+      - GF_USERS_ALLOW_SIGN_UP=false
     networks:
       - back-tier
-      - front-tier
       - gateway
     deploy:
       placement:
@@ -71,19 +72,12 @@ services:
         - "traefik.port=3000"
         - "traefik.frontend.rule=Host:monitor.gokit.info"
         - "traefik.docker.network=traefik_gateway"
-      restart_policy:
-        condition: on-failure
-        delay: 1s
-      update_config:
-        parallelism: 2
-        delay: 10s
 volumes:
-  prometheus-config:
-  prometheus-data:
-  grafana-data:
+  prometheus_config:
+  prometheus_data:
+  grafana_data:
 
 networks:
-  front-tier:
   back-tier:
   gateway:
     external:
