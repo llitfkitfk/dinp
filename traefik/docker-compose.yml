@@ -90,7 +90,7 @@ services:
     deploy:
       replicas: 3
       labels:
-        - "traefik.port=80"
+        - "traefik.port=2015"
         - "traefik.frontend.rule=Host:dash.gokit.info"
         - "traefik.backend.loadbalancer.method=drr"
 volumes:
