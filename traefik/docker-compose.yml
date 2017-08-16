@@ -81,7 +81,7 @@ services:
         - "traefik.frontend.rule=Host:whoami.gokit.info"
         - "traefik.backend.loadbalancer.method=drr"
   dash:
-    image: containerize/caddy-proxy
+    image: containerize/caddy:proxy
     environment: 
       - PROXY_HOST=app
       - PROXY_PORT=8080
