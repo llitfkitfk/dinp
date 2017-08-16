@@ -75,21 +75,24 @@ services:
       - "traefik.port=80"
       - "traefik.frontend.rule=Host:whoami.gokit.info"
     deploy:
-      replicas: 3
+      replicas: 5
       labels:
         - "traefik.port=80"
         - "traefik.frontend.rule=Host:whoami.gokit.info"
+        - "traefik.backend.loadbalancer.method=drr"
   dash:
-    image: containerize/nginx-proxy
+    image: containerize/caddy-proxy
     environment: 
-      - SERVER_PROXY_HOST=app
-      - SERVER_PROXY_PORT=8080
+      - PROXY_HOST=app
+      - PROXY_PORT=8080
     networks:
       - gateway
     deploy:
+      replicas: 3
       labels:
         - "traefik.port=80"
         - "traefik.frontend.rule=Host:dash.gokit.info"
+        - "traefik.backend.loadbalancer.method=drr"
 volumes:
   data-log:
 networks:
