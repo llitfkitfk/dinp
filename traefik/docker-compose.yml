@@ -32,14 +32,14 @@ services:
         constraints:
           - node.role == manager
           - node.hostname == node1
-  nginxredirect:
-    image: containerize/nginx-redirect
+  redir:
+    image: containerize/caddy:redir
     environment:
-      - SERVER_REDIRECT=dash.gokit.info
+      - REDIR_URI=dash.gokit.info
     networks:
       - gateway
     labels:
-        - "traefik.port=80"
+        - "traefik.port=2015"
         - "traefik.frontend.rule=Host:gokit.info"
     deploy:
       labels:
