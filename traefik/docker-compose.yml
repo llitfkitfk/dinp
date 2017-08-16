@@ -42,12 +42,10 @@ services:
         - "traefik.port=2015"
         - "traefik.frontend.rule=Host:gokit.info"
     deploy:
+      replicas: 3
       labels:
-        - "traefik.port=80"
+        - "traefik.port=2015"
         - "traefik.frontend.rule=Host:gokit.info"
-      placement:
-        constraints:
-          - node.role == manager  
   visualizer:
     image: dockersamples/visualizer:stable
     restart: always
