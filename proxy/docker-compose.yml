@@ -1,0 +1,23 @@
+version: "3.2"
+
+volumes:
+  server-data:
+  client-data:
+
+services:
+  app:
+    image: containerize/nginx
+    restart: always
+    ports:
+      - target: 2376
+        published: 2376
+        protocol: tcp
+        mode: host
+    environment: 
+      - DOCKER_TLS_DNS={{.Node.Hostname}}
+    volumes: 
+      - server-data:/etc/nginx/docker
+      - client-data:/home/docker
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      mode: global

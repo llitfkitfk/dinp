@@ -4,3 +4,8 @@ portainer/admin
 traefik/log
 nextcloud/data
 cms/cms
+
+Makefile
+setup
+.docker
+
