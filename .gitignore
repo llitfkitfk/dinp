@@ -6,6 +6,6 @@ nextcloud/data
 cms/cms
 
 Makefile
-setup
+env
 .docker
 
