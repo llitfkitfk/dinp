@@ -1,0 +1,13 @@
+version: "3"
+
+services: 
+  tls:
+    image: containerize/toolbox:docker
+    environment: 
+      - DOCKER_CERT_PATH=/data/compose/.docker/node1
+      - DOCKER_HOST=tcp://node1:2376
+    volumes: 
+      - ./:/data/compose
+      - ~/.ssh/docker:/root/.ssh:ro
+    working_dir: /data/compose
+    stdin_open: true

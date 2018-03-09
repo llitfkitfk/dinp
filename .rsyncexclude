@@ -1,0 +1,10 @@
+.DS_Store
+/Makefile
+.docker
+.git
+.gitignore
+.rsyncexclude
+
+/git-alias.sh
+
+/docker-compose.yml
